@@ -36,7 +36,7 @@
 			};
 
 			for (var i in obj){				
-				if (i == "dependency") continue;				
+				if (i === "dependency") continue;				
 				(function(){
 					var property = i;
 					r[property] = lazyProperty(r, property, function(){
@@ -110,9 +110,7 @@
 		"Для того, чтобы посмотреть, как это работает, можно запустить ф-цию \"test\"",
     ];
 
-    for (var i in text){
-    	console.log(text[i]);
-    }
+	console.log(text.join('\n'))
     console.log("Вот как она выглядит:");
     console.log(test);
     console.log("Запускаем. test()");
