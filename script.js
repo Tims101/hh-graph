@@ -41,7 +41,7 @@
                 if (i === "dependency") continue;               
                 (function(){
                     var property = i;
-                    r[property] = lazyProperty(r, property, function(){
+                    lazyProperty(r, property, function(){
                         try {
                             return resolve(property);   
                         } catch (e){
