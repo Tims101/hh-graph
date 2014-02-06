@@ -13,7 +13,7 @@
         });
     };
 
-    var Graph = function(obj){
+    var Graph = function(obj, notLazy){
         return function(args){          
             var r = {};
 
@@ -32,7 +32,10 @@
                     }
                 }   
                 
-                console.log("call " + property);                
+                if (!notLazy) {
+                    console.log("call " + property);                
+                }
+                
                 return obj[property](solvedArgs);                   
             };
 
@@ -51,6 +54,21 @@
                     });     
                 })();           
             }   
+
+            if (notLazy) {
+                var notLazyObj = {};
+                for (var i in obj){                    
+                    if (!obj.hasOwnProperty(i)) continue;
+                    if (i === "dependency") continue; 
+
+                    var property = i;
+
+                    (function() {                        
+                        notLazyObj[property] = r[property];
+                    }());                
+                }
+                return notLazyObj;
+            }
 
             return r;
         };
@@ -95,6 +113,15 @@
         console.log(calcStatGraph.m);  
         console.log("Вычислим calcStatGraph.v: ");  
         console.log(calcStatGraph.v);  
+        
+        console.log("Уберём ленивые вычисления"); 
+
+        var notLazyStatGraph = new Graph(statStructure, true);
+
+        var notLazyCalcStatGraph = notLazyStatGraph({xs: [1,2,3,6]});
+
+        console.log("Получаем обьёкт без геттеров и ленивых вычислений");
+        console.log(notLazyCalcStatGraph);
 
         return "Успех";
     }
@@ -117,3 +144,4 @@
     console.log(test);
     console.log("Запускаем. test()");
     console.log(test()); 
+    
